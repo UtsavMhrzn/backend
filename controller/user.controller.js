@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt"
 import User from "../model/User.js"
 
 export const createUserController = async (req, res) => {
@@ -10,9 +11,9 @@ export const createUserController = async (req, res) => {
         const existingEmail = await User.findOne({ email })
         if (existingEmail) {
             return res.status(400).json({ message: "user with the email already exists", user: null })
-
         }
-        const newUser = new User({ email, username, phoneNumber, password })
+        const hashedPassword = await bcrypt.hash(password, 12)
+        const newUser = new User({ email, username, phoneNumber, password: hashedPassword })
         await newUser.save()
         return res.status(200).json({ message: "user creeated successfully", user: newUser })
 
@@ -28,17 +29,44 @@ export const loginController = async (req, res) => {
     if (!email || !password) {
         return res.status(400).json({ message: "please fill in all the data fields", isAuthenticated: false })
     }
-
     try {
-        const existingUser = await User.findOne({ email, password })
-        if (existingUser) {
-            return res.status(200).json({ message: "user logged in successfully", isAuthenticated: true })
+        const existingUser = await User.findOne({ email })
+        if (!existingUser) {
+            return res.status(200).json({ message: "user not found", isAuthenticated: false })
         }
-        return res.status(500).json({ message: "invalid username or password", isAuthenticated: false })
+        const matchPassword = await bcrypt.compare(password, existingUser.password)
+        if (!matchPassword) {
+            return res.status(401).json({ message: "invalid username or password", isAuthenticated: false })
+        }
+        return res.status(200).json({ message: "logged in successfully", isAuthenticated: true })
 
 
     } catch (e) {
         console.log(e)
         return res.status(500).json({ message: "Internal server error", isAuthenticated: false })
+    }
+}
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const allUsers = await User.find()
+        if (!allUsers) {
+            return res.status(400).json({ message: "no users found", users: null })
+        }
+        return res.status(200).json({ message: " users found", users: allUsers })
+    }
+    catch (e) {
+        return res.status(400).json({ message: "server error", users: null })
+    }
+}
+
+export const deleteUser = async (req, res) => {
+    try {
+        const userId = req.params.id
+        await User.findByIdAndDelete(userId)
+        return res.status(200).json({ message: " users deleted successfully" })
+    }
+    catch (e) {
+        return res.status(400).json({ message: "server error", users: null })
     }
 }

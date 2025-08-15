@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
-export const dbConnect = () => {
 
+export const dbConnect = () => {
     mongoose.connect("mongodb://localhost:27017/ecommerce", {
         useNewUrlParser: true,
         useUnifiedTopology: true
