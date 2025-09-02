@@ -32,7 +32,7 @@ export const loginController = async (req, res) => {
     try {
         const existingUser = await User.findOne({ email })
         if (!existingUser) {
-            return res.status(200).json({ message: "user not found", isAuthenticated: false })
+            return res.status(401).json({ message: "user not found", isAuthenticated: false })
         }
         const matchPassword = await bcrypt.compare(password, existingUser.password)
         if (!matchPassword) {

@@ -3,11 +3,14 @@ import express from "express"
 import { dbConnect } from "./config/db.config.js"
 import productRouter from "./routes/product.route.js"
 import userRouter from "./routes/user.route.js"
-
+import cors from "cors"
 const app = express()
 const port = 8080
 
 app.use(bodyParser.json())
+app.use(cors({origin: "http://localhost:5173"
+    
+}))
 
 dbConnect()
 
