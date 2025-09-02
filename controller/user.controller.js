@@ -23,7 +23,6 @@ export const createUserController = async (req, res) => {
 
     }
 }
-
 export const loginController = async (req, res) => {
     const { email, password } = req.body
     if (!email || !password) {
@@ -59,6 +58,38 @@ export const getAllUsers = async (req, res) => {
         return res.status(400).json({ message: "server error", users: null })
     }
 }
+export const updateUserController = async (req, res) => {
+    try {
+        console.log(req.body)
+        const userId = req.params.id
+        const { email, username, phoneNumber, password } = req.body
+
+        let updateData = {}
+
+        if (email) {
+            const existingUserwithEmail = await User.findOne({ email, _id: { $ne: userId } })
+            if (existingUserwithEmail) {
+                return res.status(500).json({ message: "user with that email already exists so use another email ", updatedUser: null })
+            }
+            updateData.email = email
+        }
+        if (username) updateData.username = username
+        if (phoneNumber) updateData.phoneNumber = phoneNumber
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 12)
+            updateData.password = hashedPassword
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true })
+        return res.status(201).json({ message: "user updated successfully ", updatedUser: updatedUser })
+
+    }
+    catch (e) {
+        console.log(e)
+        return res.status(400).json({ message: "server error", updatedUser: null })
+
+    }
+}
 
 export const deleteUser = async (req, res) => {
     try {
@@ -68,5 +99,15 @@ export const deleteUser = async (req, res) => {
     }
     catch (e) {
         return res.status(400).json({ message: "server error", users: null })
+    }
+}
+export const getUserById = async (req, res) => {
+    try {
+        const userId = req.params.id
+        const userById = await User.findById(userId)
+        return res.status(200).json({ message: " users found successfully",user:userById })
+    }
+    catch (e) {
+        return res.status(400).json({ message: "server error", user: null })
     }
 }

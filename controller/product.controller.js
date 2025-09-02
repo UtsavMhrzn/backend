@@ -7,4 +7,3 @@ export const getAllProductController = (req, res) => {
 export const createProductController = (req,res)=>{
     
 }
-
