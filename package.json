@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 040241917bbb65c8370cfe62ce52d29d7dcfb148
 {
   "name": "ecommerce-backend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "start": "nodemon app.js",
+=======
+>>>>>>> 040241917bbb65c8370cfe62ce52d29d7dcfb148
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,11 +19,17 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+<<<<<<< HEAD
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "mongoose": "^8.17.1",
+=======
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "mongos": "^0.0.0",
+>>>>>>> 040241917bbb65c8370cfe62ce52d29d7dcfb148
     "nodemon": "^3.1.10"
   }
 }
