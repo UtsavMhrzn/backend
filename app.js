@@ -10,7 +10,7 @@ const port = 8080
 app.use(bodyParser.json())
 
 app.use(cors({
-    origin: "http://localhost:5173"
+    origin: "http://localhost:5174"
 }))
 
 dbConnect()
